@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .quiz-container {
+            width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .option {
+            margin: 5px 0;
+        }
+
+        #result {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="question" id="question"></div>
+        <div class="options" id="options"></div>
+        <button id="submit">Submit Answer</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: 'What is your name?',
+                options: ['ishmal', 'shayan', 'Shehak', 'Aryan'],
+                correctAnswer: 'ishmal'
+            },
+            {
+                question: 'what is the smallest heading in html?',
+                options: ['h1', 'h6', 'h3', 'h2'],
+                correctAnswer: 'h6'
+            },
+            {
+                question: 'What is the largest heading in html?',
+                options: ['h1', 'h2', 'h5', 'h6'],
+                correctAnswer: 'h1'
+            },
+
+            {
+                question: 'What is the root element of html page file?',
+                options: ['body', 'head', 'title', 'html'],
+                correctAnswer: 'html'
+            }       
+         ];
+
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const submitButton = document.getElementById('submit');
+        const resultElement = document.getElementById('result');
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            if (currentQuestion < quizData.length) {
+                questionElement.textContent = quizData[currentQuestion].question;
+                optionsElement.innerHTML = '';
+
+                quizData[currentQuestion].options.forEach((option, index) => {
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'answer';
+                    radio.id = `option${index}`;
+                    radio.value = option;
+
+                    const label = document.createElement('label');
+                    label.textContent = option;
+                    label.setAttribute('for', `option${index}`);
+
+                    optionsElement.appendChild(radio);
+                    optionsElement.appendChild(label);
+                });
+            } else {
+                questionElement.textContent = '';
+                optionsElement.innerHTML = '';
+                submitButton.style.display = 'none';
+                resultElement.textContent = `Quiz completed! Your score: ${score} / ${quizData.length}`;
+            }
+        }
+
+        function checkAnswer() {
+            const selectedOption = document.querySelector('input[name="answer"]:checked');
+
+            if (selectedOption) {
+                const userAnswer = selectedOption.value;
+                if (userAnswer === quizData[currentQuestion].correctAnswer) {
+                    score++;
+                }
+                currentQuestion++;
+                loadQuestion();
+            }
+        }
+
+        submitButton.addEventListener('click', checkAnswer);
+
+        // Initial load
+        loadQuestion();
+    </script>
+</body>
+</html>
